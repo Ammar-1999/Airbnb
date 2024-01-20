@@ -1,18 +1,13 @@
 import bcrypt from "bcrypt";
-import { AuthOptions, getServerSession } from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import type {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from "next";
-import type { NextAuthOptions } from "next-auth";
+
 import prisma from "@/app/libs/prismadb";
 
-const authOptions: NextAuthOptions = {
+export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
@@ -67,18 +62,4 @@ const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-export default authOptions;
-
-/**
- * Esta función es un wrapper de la función getServerSession de next-auth.
- * @param args Argumentos de la función
- * @returns Retorna la sesión del usuario al componente de servidor
- */
-export function auth(
-  ...args:
-    | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
-    | [NextApiRequest, NextApiResponse]
-    | []
-) {
-  return getServerSession(...args, authOptions);
-}
+export default NextAuth(authOptions);
