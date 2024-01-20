@@ -12,7 +12,7 @@ import type {
 import type { NextAuthOptions } from "next-auth";
 import prisma from "@/app/libs/prismadb";
 
-const authOptions: AuthOptions = {
+const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
@@ -65,7 +65,7 @@ const authOptions: AuthOptions = {
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
-} satisfies NextAuthOptions;
+};
 
 export default authOptions;
 
